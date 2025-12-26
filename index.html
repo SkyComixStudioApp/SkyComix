@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -54,6 +53,17 @@
     }
     .animate-view {
       animation: fadeInUp 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+    }
+
+    /* ANIMACIÓN DE PARTÍCULAS DORADAS */
+    @keyframes goldParticles {
+      0% { text-shadow: 0 0 0px transparent; transform: translateY(0); opacity: 1; }
+      50% { text-shadow: 0 5px 4px #ffd700, -3px 8px 2px #ffcc00; opacity: 0.8; }
+      100% { text-shadow: 0 15px 10px transparent; transform: translateY(2px); opacity: 1; }
+    }
+    .icon-particles {
+      color: #ffd700 !important;
+      animation: goldParticles 2s infinite ease-in-out;
     }
 
     .top-bar { position: fixed; top: 0; left: 0; right: 0; display: flex; align-items: center; justify-content: space-between; background: #000; padding: 12px var(--page-side-padding); border-bottom: 1px solid var(--line-red); z-index: 30; }
@@ -140,6 +150,13 @@
 
     .genre-header-item { display:flex; align-items:center; justify-content:space-between; width: 100%; }
 
+    .option-divider {
+      width: 100%;
+      height: 1px;
+      background: rgba(255, 255, 255, 0.05);
+      margin: 2px 0;
+    }
+
     .option-left { display:flex; flex-direction:row; align-items:center; gap:10px; min-width:0; }
     .option-icon { font-size:18px; display:inline-flex; align-items:center; justify-content:center; line-height:1; color: var(--text-red); width:22px; text-align:center; }
     .option-title { font-weight:700; font-size:11px; color: var(--text-red); white-space:normal; }
@@ -149,6 +166,23 @@
     .switch .knob { position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; border-radius: 50%; background: #fff; transition: left .18s ease; box-shadow: 0 1px 2px rgba(0,0,0,0.5); }
     .switch.on { background: linear-gradient(90deg,var(--icon-color-active), var(--icon-color-normal)); }
     .switch.on .knob { left: 23px; }
+
+    /* BOTÓN PAYPAL */
+    .paypal-btn {
+      background: linear-gradient(90deg, #003087, #009cde);
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-family: 'SkyCustomFont', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      text-align: center;
+      margin-top: 4px;
+    }
 
     .genre-item {
       background: var(--controls-bg);
@@ -312,12 +346,11 @@
     .modal-header .circle { width:36px; height:36px; border-radius:50%; background: #121212; display:flex; align-items:center; justify-content:center; cursor:pointer; margin-right: 6px; }
     .modal-header .circle i { font-size:14px; color: var(--icon-color-active); }
 
-    .modal-gallery { flex:1; overflow-y:auto; display:block; gap:0; padding:0; background:#111; overscroll-behavior: contain; }
+    .modal-gallery { flex:1; overflow-y:auto; display:block; gap:0; padding:0; background:#000; overscroll-behavior: contain; }
     .img-wrap { position: relative; width: 100%; background:#000; margin-bottom: 10px; min-height: 160px; display:flex; align-items:center; justify-content:center; }
     .img-wrap .spinner { position: absolute; top: 50%; left: 50%; width: 30px; height: 30px; margin: -15px 0 0 -15px; border: 3px solid var(--icon-color-active); border-top-color: transparent; border-radius: 50%; animation: spin 1s linear infinite; z-index: 2; }
     .img-wrap img { width:100%; height:auto; display:none; object-fit:cover; opacity: 0; transition: opacity 0.3s ease; }
 
-    /* ESTILO CON FONDO DIFUMINADO PARA BOTONES */
     #download-btn, #archive-btn { 
       position: absolute; 
       right: 16px; 
@@ -325,15 +358,15 @@
       height: 48px; 
       border-radius: 50%; 
       background: rgba(0, 0, 0, 0.5); 
-      backdrop-filter: blur(10px); /* EFECTO DIFUMINADO */
-      -webkit-backdrop-filter: blur(10px); 
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
       border: none; 
       display: flex; 
       align-items: center; 
       justify-content: center; 
       cursor: pointer; 
       z-index: 42; 
-      box-shadow: none; 
+      box-shadow: none;
       transition: color 0.3s ease;
     }
     #download-btn { bottom: 16px; }
@@ -4276,6 +4309,15 @@
             <span class="knob"></span>
           </label>
         </div>
+        <div class="option-divider"></div>
+        <div class="genre-header-item">
+          <div class="option-left">
+            <i class="fas fa-coins option-icon icon-particles"></i>
+            <span class="option-title">APOYAR AL DESARROLLADOR</span>
+          </div>
+          <a href="https://www.paypal.me/SkyComixStudio" target="_blank" class="paypal-btn">DONAR PAYPAL</a>
+        </div>
+        <div class="option-divider"></div>
         <div class="genre-header-item">
            <div class="option-left" style="width:100%;">
               <i class="fas fa-text-height option-icon"></i>
@@ -4377,7 +4419,6 @@
     let modalHistoryPushed = false;
     let searchHistoryPushed = false;
 
-    // LÓGICA DE ARCHIVADOS
     function getArchivedComics() {
       try {
         return JSON.parse(localStorage.getItem('archivedComics')) || [];
@@ -4404,8 +4445,6 @@
 
     async function openModal(item) {
       currentModalItem = item;
-      
-      // Estado de archivado
       if (isArchived(item.text)) archiveBtn.classList.add('is-archived');
       else archiveBtn.classList.remove('is-archived');
 
