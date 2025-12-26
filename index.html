@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>SkyComix</title>
   <link rel="stylesheet" href="https://unpkg.com/@fortawesome/fontawesome-free@6.4.2/css/all.min.css" />
   <style>
@@ -31,7 +31,14 @@
       --page-side-padding: 12px;
     }
 
-    html, body { -webkit-text-size-adjust: none; -ms-text-size-adjust: none; height:100%; }
+    /* Ajuste crítico para WebViews de Android: evitar text-autosize */
+    html, body { 
+      -webkit-text-size-adjust: 100% !important; 
+      -ms-text-size-adjust: 100% !important; 
+      text-size-adjust: 100% !important;
+      height:100%; 
+    }
+    
     *, *:focus, *:active { outline: none !important; box-shadow: none !important; -webkit-tap-highlight-color: transparent !important; }
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
@@ -167,7 +174,6 @@
     .switch.on { background: linear-gradient(90deg,var(--icon-color-active), var(--icon-color-normal)); }
     .switch.on .knob { left: 23px; }
 
-    /* BOTÓN PAYPAL */
     .paypal-btn {
       background: linear-gradient(90deg, #003087, #009cde);
       color: white;
@@ -218,12 +224,30 @@
     .cards-wrapper { 
         padding: 80px var(--page-side-padding) 80px; 
         transition: padding-top 0.3s ease;
+        min-height: calc(100vh - 144px);
+        position: relative;
     }
     
     .cards-container { 
       display: grid; 
       grid-template-columns: repeat(3, 1fr); 
       gap: 4px; 
+    }
+
+    /* TEXTO ARCHIVADOS VACÍO */
+    .empty-message {
+      position: absolute;
+      top: 45%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      width: 80%;
+      font-size: 14px;
+      font-weight: 700;
+      color: #555;
+      text-transform: uppercase;
+      line-height: 1.4;
+      display: none;
     }
 
     .card {
@@ -406,6 +430,7 @@
   <div id="genres-container" class="genres-container animate-view"></div>
 
   <main class="cards-wrapper animate-view">
+    <div id="empty-message" class="empty-message">Aquí se mostrarán tus cómics archivados</div>
     <div id="cards-container" class="cards-container"></div>
   </main>
 
@@ -448,6 +473,7 @@
     const container       = document.getElementById('cards-container');
     const genresContainer = document.getElementById('genres-container');
     const cardsWrapper    = document.querySelector('.cards-wrapper');
+    const emptyMessage    = document.getElementById('empty-message');
     const overlay         = document.getElementById('modal-overlay');
     const closeBtn        = document.getElementById('modal-close');
     const titleEl         = document.getElementById('modal-title');
@@ -4398,8 +4424,17 @@
     function renderCardsFromCurrentFilter() {
       const tab = getActiveTab();
       if (tab === 'genres') return; 
+      
       const q = searchField.value.trim().toLowerCase();
-      let items = getCurrentItems(true); 
+      let items = getCurrentItems(); 
+      
+      // Control del mensaje de archivados vacío
+      if (tab === 'archived' && items.length === 0) {
+          emptyMessage.style.display = 'block';
+      } else {
+          emptyMessage.style.display = 'none';
+      }
+
       if (q) {
          items = items.filter(item =>
            (item.text && item.text.toLowerCase().includes(q)) || (item.genre && item.genre.toLowerCase().includes(q))
@@ -4410,6 +4445,7 @@
           items = items.filter(item => (item.genre || '').toLowerCase().split(',').map(s => s.trim()).includes(filter));
         }
       }
+      
       if (dataSaver) renderCardsPaged(items);
       else renderCardsFull(items);
       triggerViewAnimation(cardsWrapper);
