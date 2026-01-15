@@ -29,6 +29,7 @@
       --card-blur-strength: 6px;
       --card-shadow: 0 6px 18px rgba(0,0,0,0.6);
       --page-side-padding: 12px;
+      --bottom-bar-bg: #0D0D0D; /* Fondo más claro para la barra inferior */
     }
 
     /* Ajuste crítico para WebViews de Android: evitar text-autosize */
@@ -301,17 +302,19 @@
 
     .bottom-bar { 
         position: fixed; 
-        bottom: 0; 
-        left: 0; 
-        right: 0; 
-        background: #000; 
-        border-top: 1px solid var(--line-red); 
+        bottom: 10px; 
+        left: 10px; 
+        right: 10px; 
+        background: var(--bottom-bar-bg); /* Usa el nuevo color */
+        border-top: 1px solid rgba(255,255,255,0.1); /* Borde ligeramente más claro */
         display: grid; 
         grid-template-columns: repeat(4, 1fr);
         align-items: center; 
         height: 64px; 
         z-index: 30; 
         padding: 0;
+        border-radius: 999px; /* Bordes redondeados al máximo */
+        box-shadow: 0 4px 12px rgba(0,0,0,0.5); /* Sombra para efecto flotante */
     }
 
     .bottom-bar .item { 
@@ -323,28 +326,19 @@
         border-radius: 999px; 
         text-align: center; 
         color: var(--icon-color-normal); 
-        transition: background 0.2s ease-out, color 0.2s ease-out;
+        transition: color 0.2s ease-out;
         width: auto; 
         justify-self: center;
     }
 
-    .bottom-bar .item i { font-size: 20px; color: inherit; transition: color 0.3s ease; }
+    .bottom-bar .item i { font-size: 20px; color: inherit; }
     .bottom-bar .item img.home-icon { width:20px; height:20px; display:block; object-fit:contain; }
 
     .bottom-bar .item .item-label {
-        max-width: 0;
-        opacity: 0;
-        overflow: hidden;
-        white-space: nowrap;
-        font-size: 10px;
-        font-weight: 700;
-        text-transform: uppercase;
-        margin-left: 0;
-        transition: max-width 0.25s ease-out, opacity 0.2s ease, margin-left 0.25s ease-out;
+        display: none; /* Ocultamos completamente las etiquetas de texto */
     }
 
-    .bottom-bar .item.active { color: var(--icon-color-active); background: rgba(255,255,255,0.08); }
-    .bottom-bar .item.active .item-label { max-width: 80px; opacity: 1; margin-left: 8px; }
+    .bottom-bar .item.active { color: var(--icon-color-active); }
 
     .modal-overlay {
       position: fixed;
@@ -375,9 +369,10 @@
     .img-wrap .spinner { position: absolute; top: 50%; left: 50%; width: 30px; height: 30px; margin: -15px 0 0 -15px; border: 3px solid var(--icon-color-active); border-top-color: transparent; border-radius: 50%; animation: spin 1s linear infinite; z-index: 2; }
     .img-wrap img { width:100%; height:auto; display:none; object-fit:cover; opacity: 0; transition: opacity 0.3s ease; }
 
-    #download-btn, #archive-btn { 
+    #archive-btn { 
       position: absolute; 
       right: 16px; 
+      bottom: 16px;
       width: 48px; 
       height: 48px; 
       border-radius: 50%; 
@@ -393,10 +388,8 @@
       box-shadow: none;
       transition: color 0.3s ease;
     }
-    #download-btn { bottom: 16px; }
-    #archive-btn { bottom: 74px; }
     
-    #download-btn i, #archive-btn i { font-size: 20px; color: var(--icon-color-active); }
+    #archive-btn i { font-size: 20px; color: var(--icon-color-active); }
     #archive-btn.is-archived i { color: #ffd700; }
 
     input[type=range] { -webkit-appearance: none; width: 100%; background: transparent; cursor: pointer; margin: 0; }
@@ -418,7 +411,7 @@
 <body>
 
   <header class="top-bar">
-    <img src="https://i.ibb.co/8nbrc06R/1768350301312.png" alt="Logo" class="logo" />
+    <img src="https://i.ibb.co/6Rc0szFB/Logo.png" alt="Logo" class="logo" />
     <i id="search-icon" class="fas fa-search search-icon"></i>
   </header>
 
@@ -466,7 +459,6 @@
     </div>
     <div id="modal-gallery" class="modal-gallery"></div>
     <button id="archive-btn" title="Archivar"><i class="fas fa-bookmark"></i></button>
-    <button id="download-btn" title="Copiar enlaces"><i class="fas fa-download"></i></button>
   </div>
 
   <script>
@@ -478,7 +470,6 @@
     const closeBtn        = document.getElementById('modal-close');
     const titleEl         = document.getElementById('modal-title');
     const galleryEl       = document.getElementById('modal-gallery');
-    const downloadBtn     = document.getElementById('download-btn');
     const archiveBtn      = document.getElementById('archive-btn');
     const logo            = document.querySelector('.logo');
     const searchIcon      = document.getElementById('search-icon');
@@ -487,7 +478,18 @@
     const searchWrapper   = document.getElementById('search-wrapper'); 
 
     const images = [
-      
+
+
+{
+        src: 'https://imges.sexkomix2.com/uploads_images/comic-porno-the-yellow-fantasy-16--la-lista--vcp-comico-de-sexo-hizo-un-trato-2025-08-10/comic-porno-the-yellow-fantasy-16--la-lista--vcp-comico-de-sexo-hizo-un-trato-2025-08-10-408404787.jpg',
+        text: 'THE YELLOW FANTASY 16  LA LISTA  VCP',
+        link: 'go:385',
+        genre: 'Incesto, Los Simpsons, Disney, ',
+        gallery: [
+          { src: 'https://imges.sexkomix2.com/uploads_images/comic-porno-the-yellow-fantasy-16--la-lista--vcp-comico-de-sexo-hizo-un-trato-2025-08-10/comic-porno-the-yellow-fantasy-16--la-lista--vcp-comico-de-sexo-hizo-un-trato-2025-08-10-408404787.jpg', text: 'Detalle 1' }, { src: 'https://imges.sexkomix2.com/uploads_images/comic-porno-the-yellow-fantasy-16--la-lista--vcp-comico-de-sexo-hizo-un-trato-2025-08-10/comic-porno-the-yellow-fantasy-16--la-lista--vcp-comico-de-sexo-hizo-un-trato-2025-08-10-120514628.jpg', text: 'Detalle 2' }, { src: 'https://imges.sexkomix2.com/uploads_images/comic-porno-the-yellow-fantasy-16--la-lista--vcp-comico-de-sexo-hizo-un-trato-2025-08-10/comic-porno-the-yellow-fantasy-16--la-lista--vcp-comico-de-sexo-hizo-un-trato-2025-08-10-323923641.jpg', text: 'Detalle 3' }, { src: 'https://imges.sexkomix2.com/uploads_images/comic-porno-the-yellow-fantasy-16--la-lista--vcp-comico-de-sexo-hizo-un-trato-2025-08-10/comic-porno-the-yellow-fantasy-16--la-lista--vcp-comico-de-sexo-hizo-un-trato-2025-08-10-413432803.jpg', text: 'Detalle 4' }, { src: 'https://imges.sexkomix2.com/uploads_images/comic-porno-the-yellow-fantasy-16--la-lista--vcp-comico-de-sexo-hizo-un-trato-2025-08-10/-2025-08-10-474503658.jpg', text: 'Detalle 5' }, { src: 'https://imges.sexkomix2.com/uploads_images/comic-porno-the-yellow-fantasy-16--la-lista--vcp-comico-de-sexo-hizo-un-trato-2025-08-10/-2025-08-10-208213901.jpg', text: 'Detalle 6' }, { src: 'https://imges.sexkomix2.com/uploads_images/comic-porno-the-yellow-fantasy-16--la-lista--vcp-comico-de-sexo-hizo-un-trato-2025-08-10/-2025-08-10-190903007.jpg', text: 'Detalle 7' }, { src: 'https://imges.sexkomix2.com/uploads_images/comic-porno-the-yellow-fantasy-16--la-lista--vcp-comico-de-sexo-hizo-un-trato-2025-08-10/-2025-08-10-369013432.jpg', text: 'Detalle 8' }, { src: 'https://imges.sexkomix2.com/uploads_images/-2025-09-11-205204961.jpg', text: 'Detalle 9' }, { src: 'https://imges.sexkomix2.com/uploads_images/-2025-09-11-230813548.jpg', text: 'Detalle 10' }, { src: 'https://imges.sexkomix2.com/uploads_images/-2025-09-11-48372207.jpg', text: 'Detalle 11' }, { src: 'https://imges.sexkomix2.com/uploads_images/-2025-09-11-435533221.jpg', text: 'Detalle 12' }, { src: 'https://imges.sexkomix2.com/uploads_images/-2025-09-11-233844643.jpg', text: 'Detalle 13' }, { src: 'https://imges.sexkomix2.com/uploads_images/-2025-09-11-348653203.jpg', text: 'Detalle 14' }, { src: 'https://imges.sexkomix2.com/uploads_images/-2025-09-22-287003787.jpg', text: 'Detalle 15' }, { src: 'https://imges.sexkomix2.com/uploads_images/-2025-09-22-25161545.jpg', text: 'Detalle 16' }, { src: 'https://imges.sexkomix2.com/uploads_images/-2025-09-30-275203843.jpg', text: 'Detalle 17' }, { src: 'https://imges.sexkomix2.com/uploads_images/-2025-09-30-232411431.jpg', text: 'Detalle 18' }, { src: 'https://imges.sexkomix2.com/uploads_images/-2025-10-10-358812777.jpg', text: 'Detalle 19' }, { src: 'https://imges.sexkomix2.com/uploads_images/-2025-10-10-24830565.jpg', text: 'Detalle 20' }, { src: 'https://imges.sexkomix2.com/uploads_images/-2025-10-19-398301938.jpg', text: 'Detalle 21' }, { src: 'https://imges.sexkomix2.com/uploads_images/-2025-10-19-493212784.jpg', text: 'Detalle 22' }, { src: 'https://imges.sexkomix2.com/uploads_images/-2025-10-31-31801436.jpg', text: 'Detalle 23' }, { src: 'https://imges.sexkomix2.com/uploads_images/-2025-10-31-49331973.jpg', text: 'Detalle 24' }, { src: 'https://imges.sexkomix2.com/uploads_images/-2025-11-13-388204859.jpg', text: 'Detalle 25' }, { src: 'https://imges.sexkomix2.com/uploads_images/-2025-11-13-257313164.jpg', text: 'Detalle 26' }, { src: 'https://imges.sexkomix2.com/uploads_images/-2025-11-16-456902850.jpg', text: 'Detalle 27' }, { src: 'https://imges.sexkomix2.com/uploads_images/-2025-11-16-390713161.jpg', text: 'Detalle 28' }, { src: 'https://imges.sexkomix2.com/uploads_images/-2025-11-26-103502371.jpg', text: 'Detalle 29' }, { src: 'https://imges.sexkomix2.com/uploads_images/-2025-11-26-303313130.jpg', text: 'Detalle 30' }, { src: 'https://imges.sexkomix2.com/uploads_images/-2025-12-05-396204754.jpg', text: 'Detalle 31' }, { src: 'https://imges.sexkomix2.com/uploads_images/-2025-12-05-216314481.jpg', text: 'Detalle 32' }, { src: 'https://imges.sexkomix2.com/uploads_images/-2025-12-18-429603687.jpg', text: 'Detalle 33' }, { src: 'https://imges.sexkomix2.com/uploads_images/-2025-12-18-495114106.jpg', text: 'Detalle 34' }, { src: 'https://imges.sexkomix2.com/uploads_images/-2025-12-27-51601802.jpg', text: 'Detalle 35' }, { src: 'https://imges.sexkomix2.com/uploads_images/-2025-12-27-321713650.jpg', text: 'Detalle 36' }, { src: 'https://imges.sexkomix2.com/uploads_images/-2026-01-06-159701759.jpg', text: 'Detalle 37' }, { src: 'https://imges.sexkomix2.com/uploads_images/-2026-01-06-349713386.jpg', text: 'Detalle 38' }, { src: 'https://imges.sexkomix2.com/uploads_images/-2026-01-10-29104863.jpg', text: 'Detalle 39' }, { src: 'https://imges.sexkomix2.com/uploads_images/-2026-01-10-182412007.jpg', text: 'Detalle 40' }
+        ]
+      },
+
 
 {
         src: 'https://reycomix.com/wp-content/uploads/2025/03/Gwen-vs-4arms-01.jpg',
@@ -4558,12 +4560,6 @@
 
     closeBtn.addEventListener('click', () => closeModal());
     
-    downloadBtn.addEventListener('click', () => {
-      let links = currentModalItem.gallery.map(g => g.src).filter(Boolean);
-      const encrypted = btoa(JSON.stringify({ name: titleEl.textContent.trim(), urls: links }));
-      navigator.clipboard.writeText(encrypted).finally(()=> { window.open('https://skycomixstudio.github.io/Centro-de-descarga-Skycomix/', '_blank'); });
-    });
-
     archiveBtn.addEventListener('click', () => {
         if (currentModalItem) toggleArchive(currentModalItem);
     });
